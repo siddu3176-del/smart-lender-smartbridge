@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+
+{% block title %}Smart Lender - Home{% endblock %}
+
+{% block content %}
+<div class="container animate-fade-in">
+    <section class="hero-section">
+        <h1 class="hero-title">Intelligent Loan Eligibility Evaluator</h1>
+        <p class="hero-subtitle">
+            Leveraging state-of-the-art ensemble classifiers to assess creditworthiness instantly, reducing non-performing assets and optimizing manual review pipelines.
+        </p>
+        <div class="cta-buttons">
+            <a href="{{ url_for('predict') }}" class="btn btn-primary btn-large">
+                <i class="fa-solid fa-wand-magic-sparkles"></i> Evaluate Application
+            </a>
+        </div>
+    </section>
+
+    <!-- Metrics Section -->
+    <section class="metrics-section">
+        <h2 class="section-title"><i class="fa-solid fa-gauge-high"></i> Model Comparison & Benchmarks</h2>
+        <div class="metrics-grid">
+            <div class="metric-card {% if performance %}{% endif %}">
+                <div class="metric-icon dt-icon"><i class="fa-solid fa-network-wired"></i></div>
+                <h3>Decision Tree</h3>
+                <div class="metric-value">
+                    <span class="label">Train:</span> 82.3%
+                </div>
+                <div class="metric-value">
+                    <span class="label">Test:</span> 79.7%
+                </div>
+                <p class="metric-desc">Simple hierarchical ruleset, prone to overfitting but highly interpretable.</p>
+            </div>
+            
+            <div class="metric-card">
+                <div class="metric-icon rf-icon"><i class="fa-solid fa-tree-city"></i></div>
+                <h3>Random Forest</h3>
+                <div class="metric-value">
+                    <span class="label">Train:</span> 84.1%
+                </div>
+                <div class="metric-value">
+                    <span class="label">Test:</span> 81.3%
+                </div>
+                <p class="metric-desc">Ensemble bagging classifier, reduces variance with bootstrap aggregation.</p>
+            </div>
+
+            <div class="metric-card">
+                <div class="metric-icon knn-icon"><i class="fa-solid fa-people-arrows"></i></div>
+                <h3>K-Nearest Neighbors</h3>
+                <div class="metric-value">
+                    <span class="label">Train:</span> 81.7%
+                </div>
+                <div class="metric-value">
+                    <span class="label">Test:</span> 78.0%
+                </div>
+                <p class="metric-desc">Distance-based instance model, relies on feature space similarity clustering.</p>
+            </div>
+
+            <div class="metric-card best-model-card">
+                <div class="badge-best"><i class="fa-solid fa-crown"></i> Best Performer</div>
+                <div class="metric-icon xgb-icon"><i class="fa-solid fa-bolt"></i></div>
+                <h3>XGBoost Classifier</h3>
+                <div class="metric-value">
+                    <span class="label">Train:</span> 94.7%
+                </div>
+                <div class="metric-value">
+                    <span class="label">Test:</span> 81.1%
+                </div>
+                <p class="metric-desc">Gradient boosted decision trees, optimized for speed and generalization. Integrates with the production backend.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- EDA Visual Insights -->
+    <section class="eda-section">
+        <h2 class="section-title"><i class="fa-solid fa-chart-pie"></i> Exploratory Data Analysis Insights</h2>
+        <p class="section-subtitle">Real-time analysis of the distributions and demographics within the historical loan applications database.</p>
+        
+        <div class="eda-grid">
+            <div class="eda-card">
+                <h4>Loan Status Distribution</h4>
+                <div class="eda-img-container">
+                    <img src="{{ url_for('static', filename='images/eda_target.png') }}" alt="Target Distribution">
+                </div>
+                <p class="eda-caption">Displays the proportion of approved vs. rejected loans in the historical dataset, highlighting class imbalance.</p>
+            </div>
+            
+            <div class="eda-card">
+                <h4>Credit History Impact</h4>
+                <div class="eda-img-container">
+                    <img src="{{ url_for('static', filename='images/eda_credit.png') }}" alt="Credit History Impact">
+                </div>
+                <p class="eda-caption">Visualizes the primary predictive factor: applicants with clean credit history have significantly higher approval rates.</p>
+            </div>
+
+            <div class="eda-card">
+                <h4>Education Status vs Approval</h4>
+                <div class="eda-img-container">
+                    <img src="{{ url_for('static', filename='images/eda_education.png') }}" alt="Education vs Approval">
+                </div>
+                <p class="eda-caption">Analysis showing approval distributions partitioned by Graduate and Non-Graduate cohorts.</p>
+            </div>
+
+            <div class="eda-card">
+                <h4>Applicant Income Distribution</h4>
+                <div class="eda-img-container">
+                    <img src="{{ url_for('static', filename='images/eda_income.png') }}" alt="Income Distribution">
+                </div>
+                <p class="eda-caption">Right-skewed income distribution of applicants, indicating concentration of lower-to-middle income bracket applications.</p>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}

@@ -1,0 +1,163 @@
+{% extends 'base.html' %}
+
+{% block title %}Smart Lender - Evaluation Portal{% endblock %}
+
+{% block content %}
+<div class="container animate-fade-in">
+    <div class="predict-layout">
+        <!-- Form Section -->
+        <section class="form-container glass-card">
+            <h2 class="form-title"><i class="fa-solid fa-file-signature"></i> Applicant Details Form</h2>
+            <form action="{{ url_for('predict') }}" method="POST" id="loanForm" class="predict-form">
+                
+                <div class="form-grid">
+                    <!-- Column 1 -->
+                    <div class="form-group">
+                        <label for="Gender"><i class="fa-solid fa-venus-mars"></i> Gender</label>
+                        <select name="Gender" id="Gender" required>
+                            <option value="Male" {% if result and result.input.Gender == 'Male' %}selected{% endif %}>Male</option>
+                            <option value="Female" {% if result and result.input.Gender == 'Female' %}selected{% endif %}>Female</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Married"><i class="fa-solid fa-ring"></i> Marital Status</label>
+                        <select name="Married" id="Married" required>
+                            <option value="No" {% if result and result.input.Married == 'No' %}selected{% endif %}>Single / Unmarried</option>
+                            <option value="Yes" {% if result and result.input.Married == 'Yes' %}selected{% endif %}>Married</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Dependents"><i class="fa-solid fa-people-roof"></i> Dependents</label>
+                        <select name="Dependents" id="Dependents" required>
+                            <option value="0" {% if result and result.input.Dependents == '0' %}selected{% endif %}>0 Dependents</option>
+                            <option value="1" {% if result and result.input.Dependents == '1' %}selected{% endif %}>1 Dependent</option>
+                            <option value="2" {% if result and result.input.Dependents == '2' %}selected{% endif %}>2 Dependents</option>
+                            <option value="3+" {% if result and result.input.Dependents == '3+' %}selected{% endif %}>3+ Dependents</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Education"><i class="fa-solid fa-graduation-cap"></i> Education</label>
+                        <select name="Education" id="Education" required>
+                            <option value="Graduate" {% if result and result.input.Education == 'Graduate' %}selected{% endif %}>Graduate</option>
+                            <option value="Not Graduate" {% if result and result.input.Education == 'Not Graduate' %}selected{% endif %}>Not Graduate</option>
+                        </select>
+                    </div>
+
+                    <!-- Column 2 -->
+                    <div class="form-group">
+                        <label for="Self_Employed"><i class="fa-solid fa-briefcase"></i> Employment Status</label>
+                        <select name="Self_Employed" id="Self_Employed" required>
+                            <option value="No" {% if result and result.input.Self_Employed == 'No' %}selected{% endif %}>Salaried Employee</option>
+                            <option value="Yes" {% if result and result.input.Self_Employed == 'Yes' %}selected{% endif %}>Self-Employed / Freelancer</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="ApplicantIncome"><i class="fa-solid fa-money-bill-wave"></i> Applicant Monthly Income ($)</label>
+                        <input type="number" name="ApplicantIncome" id="ApplicantIncome" min="0" placeholder="e.g. 5400" 
+                               value="{% if result %}{{ result.input.ApplicantIncome | int }}{% else %}5400{% endif %}" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="CoapplicantIncome"><i class="fa-solid fa-handshake"></i> Co-Applicant Income ($)</label>
+                        <input type="number" name="CoapplicantIncome" id="CoapplicantIncome" min="0" placeholder="e.g. 0" 
+                               value="{% if result %}{{ result.input.CoapplicantIncome | int }}{% else %}0{% endif %}" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="LoanAmount"><i class="fa-solid fa-sack-dollar"></i> Loan Amount ($ in thousands)</label>
+                        <input type="number" name="LoanAmount" id="LoanAmount" min="0" placeholder="e.g. 150" 
+                               value="{% if result %}{{ result.input.LoanAmount | int }}{% else %}150{% endif %}" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Loan_Amount_Term"><i class="fa-solid fa-calendar-days"></i> Loan Term (Months)</label>
+                        <select name="Loan_Amount_Term" id="Loan_Amount_Term" required>
+                            <option value="120" {% if result and result.input.Loan_Amount_Term == 120 %}selected{% endif %}>120 Months (10 Years)</option>
+                            <option value="180" {% if result and result.input.Loan_Amount_Term == 180 %}selected{% endif %}>180 Months (15 Years)</option>
+                            <option value="240" {% if result and result.input.Loan_Amount_Term == 240 %}selected{% endif %}>240 Months (20 Years)</option>
+                            <option value="360" {% if not result or (result and result.input.Loan_Amount_Term == 360) %}selected{% endif %}>360 Months (30 Years)</option>
+                            <option value="480" {% if result and result.input.Loan_Amount_Term == 480 %}selected{% endif %}>480 Months (40 Years)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Credit_History"><i class="fa-solid fa-credit-card"></i> Credit History Score</label>
+                        <select name="Credit_History" id="Credit_History" required>
+                            <option value="1.0" {% if not result or (result and result.input.Credit_History == 1.0) %}selected{% endif %}>Clean Credit History (Score &gt;= 1.0)</option>
+                            <option value="0.0" {% if result and result.input.Credit_History == 0.0 %}selected{% endif %}>Poor Credit History (Score &lt; 1.0)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Property_Area"><i class="fa-solid fa-map-location-dot"></i> Property Location Area</label>
+                        <select name="Property_Area" id="Property_Area" required>
+                            <option value="Urban" {% if result and result.input.Property_Area == 'Urban' %}selected{% endif %}>Urban</option>
+                            <option value="Semiurban" {% if result and result.input.Property_Area == 'Semiurban' %}selected{% endif %}>Semiurban</option>
+                            <option value="Rural" {% if result and result.input.Property_Area == 'Rural' %}selected{% endif %}>Rural</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-submit">
+                    <i class="fa-solid fa-magnifying-glass-chart"></i> Run ML Assessment
+                </button>
+            </form>
+        </section>
+
+        <!-- Result Display Section -->
+        <section class="result-container">
+            {% if result %}
+                <div class="result-card glass-card {% if result.prediction == 'Approved' %}approved-card{% else %}rejected-card{% endif %} animate-slide-up">
+                    <div class="result-header">
+                        <div class="result-icon">
+                            {% if result.prediction == 'Approved' %}
+                                <i class="fa-solid fa-circle-check"></i>
+                            {% else %}
+                                <i class="fa-solid fa-circle-xmark"></i>
+                            {% endif %}
+                        </div>
+                        <h3>Application {{ result.prediction }}</h3>
+                    </div>
+                    
+                    <div class="result-body">
+                        <div class="metric-row">
+                            <span class="metric-label">XGBoost Confidence:</span>
+                            <span class="metric-value highlight-text">{{ result.confidence }}</span>
+                        </div>
+                        <div class="metric-row">
+                            <span class="metric-label">Evaluated Category:</span>
+                            <span class="metric-value">{{ result.scenario }}</span>
+                        </div>
+                        
+                        <div class="scenario-details">
+                            {% if result.scenario == 'Scenario 1: Fast-Track Approval (Low-Risk Applicant)' %}
+                                <div class="alert alert-success">
+                                    <i class="fa-solid fa-bolt"></i> <strong>System recommendation:</strong> Clean Credit History and stable income detected. Fast-track this file to automated final review stage.
+                                </div>
+                            {% elif result.scenario == 'Scenario 2: High-Risk Applicant Detected' %}
+                                <div class="alert alert-danger">
+                                    <i class="fa-solid fa-triangle-exclamation"></i> <strong>System recommendation:</strong> Poor credit history or high debt-to-income ratio flagged. Submit to Credit Risk Committee for strict manual check.
+                                </div>
+                            {% else %}
+                                <div class="alert alert-info">
+                                    <i class="fa-solid fa-circle-info"></i> <strong>System recommendation:</strong> Standard profile. Requires secondary verification of employment certificates and property deeds.
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <div class="placeholder-card glass-card">
+                    <i class="fa-solid fa-calculator placeholder-icon animate-pulse"></i>
+                    <h3>Awaiting Evaluation</h3>
+                    <p>Enter the applicant's details in the form and click "Run ML Assessment" to execute our XGBoost classification pipeline.</p>
+                </div>
+            {% endif %}
+        </section>
+    </div>
+</div>
+{% endblock %}
